@@ -74,7 +74,7 @@ function runTests() {
 
   if (test('post dispatcher writes both bash audit and cost logs in one pass', () => {
     const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ecc-bash-dispatcher-'));
-    const payload = { tool_input: { command: 'npm publish --token abc123' } };
+    const payload = { tool_input: { command: 'npm publish --token fixture-token' } };
 
     try {
       const result = runScript(postDispatcher, payload, {
@@ -89,8 +89,8 @@ function runTests() {
 
       assert.ok(auditLog.includes('--token=<REDACTED>'));
       assert.ok(costLog.includes('tool=Bash command=npm publish --token=<REDACTED>'));
-      assert.ok(!auditLog.includes('abc123'));
-      assert.ok(!costLog.includes('abc123'));
+      assert.ok(!auditLog.includes('fixture-token'));
+      assert.ok(!costLog.includes('fixture-token'));
     } finally {
       fs.rmSync(homeDir, { recursive: true, force: true });
     }
